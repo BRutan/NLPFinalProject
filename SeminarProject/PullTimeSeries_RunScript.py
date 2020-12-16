@@ -27,7 +27,7 @@ def IsAscii(string):
 
 def CalculateSentimentScores():
     # Get command line arguments:
-    parser = argparse.ArgumentParser(prog='SeminarProject')
+    parser = argparse.ArgumentParser(prog='NLPFinalProject')
     parser.add_argument('username', type = str, help="Username for MYSQL instance.")
     parser.add_argument('pw', type = str, help="Password to MYSQL instance.")
     parser.add_argument('schema', type = str, help="Name of schema containing all tables.")

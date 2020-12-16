@@ -2,7 +2,7 @@
 # CorporateFiling.py
 ##########################################
 # Description:
-# * Class pulls 10K for ticker from SEC website, 
+# * Class pulls 10Ks/10Qs for ticker from SEC website, 
 # cleans into usable form, then divides text up into
 # appropriate sections.
 
@@ -65,7 +65,8 @@ class CorporateFiling(object):
     * Class pulls 10K/10Q/8K for ticker from SEC website, divides text up into appropriate sections,
     and stores text and financials data in easily accessible tables.
     """
-    AllDescriptions = {}
+    __sectionTarget = [re.compile('Result(s).+', re.IGNORECASE)]
+    __typeTarget = { DocumentType.10K : re.compile('10-k', re.IGNORECASE), DocumentType.10Q : re.compile('10-q', re.IGNORECASE) }
     ###############
     # For reading raw xml data:
     ###############
@@ -153,31 +154,15 @@ class CorporateFiling(object):
     def Date(self):
         return self.__date
     @property
-    def DateStr(self):
-        return self.__date.strftime('%Y%m%d')
-    @property
     def DocumentType(self):
         return self.__type
     @property
-    def FilePath(self):
+    def Results(self):
         """
-        * Return predetermined file path name for this object, to read from and output to.
+        * "Result of Operations" section for performing sentiment 
+        analysis.
         """
-        return ''.join([self.Name + '.txt'])
-    @property
-    def Name(self):
-        """
-        * Return name of object, containing document type and filing date information 
-        (i.e. <Ticker>_<DocumentType>_<FilingDate>).
-        """
-        return ''.join([self.Ticker, '_', self.DocumentType.replace('-','_'), '_', self.DateStr])
-    @property
-    def SubDocuments(self):
-        """
-        * Return all data contained within <document> tags
-        { DocName -> SubDocument }.
-        """
-        return self.__subDocs
+        return self.__results
     @property
     def Ticker(self):
         """
@@ -464,7 +449,6 @@ class CorporateFiling(object):
             return
         soup = None
         links = []
-
         if htmlPath != None:
             soup = Soup(open(htmlPath, 'r'), "lxml")
         elif date:
@@ -472,7 +456,6 @@ class CorporateFiling(object):
             links = self.__GetDocumentLinks(date, steps.PullFinancials)
         else:
             raise BaseException('At least one argument must be provided.')
-
         # Document is divided into multiple <document> tags, containing text, financials, tables with footnotes:
         self.__subDocs = {}
         if links:

@@ -51,7 +51,7 @@ class CorpDataPuller(object):
             errs.extend(self.__CheckPriceTypes(priceTypes))
         if errs:
             raise Exception('\n'.join(errs))
-
+        
     def GetAttributes(self, ticker, attributes = None, priceTypes = None):
         """
         * Get attributes of company with ticker.
@@ -182,7 +182,7 @@ class CorpDataPuller(object):
         elif not priceTypes:
             errs.append('Need at least one priceType.')
         elif isinstance(priceTypes, list):
-            invalid = [pType for pType in priceTypes if pType.capitalize() not in CorpDataPuller.__validPriceTypes]
+            invalid = [pType for pType in priceTypes if pType not in CorpDataPuller.__validPriceTypes]
             if invalid:
                 errs.append(''.join(['The following priceTypes are invalid: ', ','.join(invalid)]))
         else:

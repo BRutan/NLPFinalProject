@@ -12,7 +12,7 @@ import os
 import pandas as pd
 from PullTwitterData import TwitterPuller
 import re
-from SeminarProject import SeminarProject
+from NLPFinalProject import NLPFinalProject
 import sys
 
 def PullAllData():
@@ -51,7 +51,7 @@ def PullAllData():
     ##########################
     # Perform key steps:
     ##########################
-    seminar = SeminarProject(inputs, db)
+    seminar = NLPFinalProject(inputs, db)
     print("Creating tables.")
     seminar.CreateTables()
     print("Inserting corporation attributes.")
